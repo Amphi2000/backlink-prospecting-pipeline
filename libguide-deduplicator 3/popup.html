@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LibGuide Deduplicator</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>LibGuide Deduplicator</h1>
+      <p class="subtitle">Clean your backlink list by domain</p>
+    </div>
+
+    <div class="upload-section">
+      <label for="csvFile" class="upload-label">
+        <svg class="upload-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+          <polyline points="17 8 12 3 7 8"></polyline>
+          <line x1="12" y1="3" x2="12" y2="15"></line>
+        </svg>
+        <span class="upload-text">Choose CSV File</span>
+        <span class="file-name" id="fileName">No file selected</span>
+      </label>
+      <input type="file" id="csvFile" accept=".csv" hidden>
+    </div>
+
+    <div class="keywords-section">
+      <label for="keywords" class="keywords-label">Relevance Keywords (comma-separated)</label>
+      <input 
+        type="text" 
+        id="keywords" 
+        class="keywords-input"
+        placeholder="christianity, theology, religion, bible, faith, ministry"
+        value="christianity, theology, religion, bible, faith, ministry, spirituality, church"
+      >
+      <p class="help-text">URLs containing these keywords will be prioritized</p>
+    </div>
+
+    <div class="stats" id="stats" style="display: none;">
+      <div class="stat-card">
+        <div class="stat-value" id="totalUrls">0</div>
+        <div class="stat-label">Total URLs</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" id="uniqueDomains">0</div>
+        <div class="stat-label">Unique Domains</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" id="removed">0</div>
+        <div class="stat-label">Duplicates Removed</div>
+      </div>
+    </div>
+
+    <div class="actions">
+      <button id="processBtn" class="btn btn-primary" disabled>
+        <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polyline points="9 11 12 14 22 4"></polyline>
+          <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path>
+        </svg>
+        Process CSV
+      </button>
+      <button id="downloadBtn" class="btn btn-success" style="display: none;">
+        <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+          <polyline points="7 10 12 15 17 10"></polyline>
+          <line x1="12" y1="15" x2="12" y2="3"></line>
+        </svg>
+        Download Cleaned CSV
+      </button>
+    </div>
+
+    <div class="status" id="status"></div>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>
