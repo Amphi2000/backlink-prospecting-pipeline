@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <style>
+    body {
+      width: 350px;
+      padding: 0;
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    }
+    
+    .container {
+      padding: 20px;
+      color: white;
+    }
+    
+    h1 {
+      margin: 0 0 10px 0;
+      font-size: 24px;
+      font-weight: 700;
+    }
+    
+    .subtitle {
+      font-size: 13px;
+      opacity: 0.9;
+      margin-bottom: 20px;
+    }
+    
+    .tabs {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 15px;
+    }
+    
+    .tab {
+      flex: 1;
+      padding: 8px;
+      background: rgba(255, 255, 255, 0.2);
+      border: none;
+      border-radius: 8px;
+      color: white;
+      font-weight: 600;
+      cursor: pointer;
+      font-size: 13px;
+    }
+    
+    .tab.active {
+      background: white;
+      color: #667eea;
+    }
+    
+    .tab-content {
+      display: none;
+    }
+    
+    .tab-content.active {
+      display: block;
+    }
+    
+    .stats {
+      background: rgba(255, 255, 255, 0.15);
+      border-radius: 12px;
+      padding: 15px;
+      margin-bottom: 15px;
+      backdrop-filter: blur(10px);
+    }
+    
+    .stat-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 10px;
+      font-size: 14px;
+    }
+    
+    .stat-row:last-child {
+      margin-bottom: 0;
+    }
+    
+    .stat-label {
+      opacity: 0.9;
+    }
+    
+    .stat-value {
+      font-weight: 700;
+      font-size: 18px;
+    }
+    
+    .controls {
+      background: rgba(255, 255, 255, 0.15);
+      border-radius: 12px;
+      padding: 15px;
+      margin-bottom: 15px;
+      backdrop-filter: blur(10px);
+    }
+    
+    .toggle-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+    
+    .toggle-container:last-child {
+      margin-bottom: 0;
+    }
+    
+    .toggle-label {
+      font-size: 14px;
+      font-weight: 500;
+    }
+    
+    .toggle-switch {
+      position: relative;
+      width: 50px;
+      height: 26px;
+      background: rgba(255, 255, 255, 0.3);
+      border-radius: 13px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    
+    .toggle-switch.active {
+      background: #4CAF50;
+    }
+    
+    .toggle-slider {
+      position: absolute;
+      top: 3px;
+      left: 3px;
+      width: 20px;
+      height: 20px;
+      background: white;
+      border-radius: 50%;
+      transition: transform 0.3s;
+    }
+    
+    .toggle-switch.active .toggle-slider {
+      transform: translateX(24px);
+    }
+    
+    .button {
+      width: 100%;
+      padding: 12px;
+      border: none;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      margin-bottom: 10px;
+    }
+    
+    .button:last-child {
+      margin-bottom: 0;
+    }
+    
+    .button-primary {
+      background: white;
+      color: #667eea;
+    }
+    
+    .button-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    }
+    
+    .button-secondary {
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+    }
+    
+    .button-secondary:hover {
+      background: rgba(255, 255, 255, 0.3);
+    }
+    
+    .button-danger {
+      background: rgba(244, 67, 54, 0.8);
+      color: white;
+    }
+    
+    .button-danger:hover {
+      background: rgba(244, 67, 54, 1);
+    }
+    
+    .button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+    
+    .status {
+      font-size: 12px;
+      text-align: center;
+      padding: 8px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 6px;
+      margin-top: 15px;
+    }
+    
+    .status.active {
+      background: rgba(76, 175, 80, 0.3);
+    }
+    
+    /* Queue styles */
+    .queue-input {
+      width: 100%;
+      padding: 10px;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.1);
+      color: white;
+      font-size: 13px;
+      margin-bottom: 10px;
+      box-sizing: border-box;
+    }
+    
+    .queue-input::placeholder {
+      color: rgba(255, 255, 255, 0.6);
+    }
+    
+    .queue-list {
+      max-height: 200px;
+      overflow-y: auto;
+      margin-bottom: 10px;
+    }
+    
+    .queue-item {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 8px;
+      border-radius: 6px;
+      margin-bottom: 6px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 12px;
+    }
+    
+    .queue-item.active {
+      background: rgba(76, 175, 80, 0.3);
+      border: 2px solid #4CAF50;
+    }
+    
+    .queue-item.completed {
+      opacity: 0.5;
+      text-decoration: line-through;
+    }
+    
+    .queue-item-text {
+      flex: 1;
+      margin-right: 8px;
+      word-break: break-word;
+    }
+    
+    .queue-item-delete {
+      background: rgba(244, 67, 54, 0.8);
+      border: none;
+      color: white;
+      padding: 2px 6px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 11px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🔗 Backlink Collector</h1>
+    <div class="subtitle">Collect links while you search Google</div>
+    
+    <div class="tabs">
+      <button class="tab active" data-tab="manual">Manual</button>
+      <button class="tab" data-tab="queue">Queue</button>
+    </div>
+    
+    <!-- Manual Tab -->
+    <div class="tab-content active" id="manual-tab">
+      <div class="stats">
+        <div class="stat-row">
+          <span class="stat-label">Total Collected:</span>
+          <span class="stat-value" id="totalCount">0</span>
+        </div>
+        <div class="stat-row">
+          <span class="stat-label">Last Updated:</span>
+          <span class="stat-value" id="lastUpdated" style="font-size: 12px;">Never</span>
+        </div>
+      </div>
+      
+      <div class="controls">
+        <div class="toggle-container">
+          <span class="toggle-label">Auto-Collect</span>
+          <div class="toggle-switch" id="autoCollectToggle">
+            <div class="toggle-slider"></div>
+          </div>
+        </div>
+        
+        <div class="toggle-container">
+          <span class="toggle-label">Auto Next Page</span>
+          <div class="toggle-switch" id="autoNextToggle">
+            <div class="toggle-slider"></div>
+          </div>
+        </div>
+      </div>
+      
+      <button class="button button-primary" id="collectNow">
+        Collect This Page Now
+      </button>
+      
+      <button class="button button-secondary" id="exportCSV">
+        📥 Export to CSV
+      </button>
+
+      <button class="button button-secondary" id="uploadDedup">
+        📂 Upload Dedup List
+      </button>
+      <input type="file" id="dedupFile" accept=".csv" style="display:none;">
+
+      <button class="button button-secondary" id="downloadDedup">
+        💾 Download Updated Dedup List
+      </button>
+
+      <button class="button button-danger" id="clearData">
+        🗑️ Clear All Data
+      </button>
+    </div>
+    
+    <!-- Queue Tab -->
+    <div class="tab-content" id="queue-tab">
+      <textarea 
+        class="queue-input" 
+        id="queryInput" 
+        placeholder="Paste queries here (one per line)"
+        rows="5"
+        style="resize: vertical; font-family: monospace;"
+      ></textarea>
+      
+      <button class="button button-secondary" id="addToQueue" style="margin-bottom: 10px;">
+        ➕ Add to Queue
+      </button>
+      
+      <div class="queue-list" id="queueList"></div>
+      
+      <button class="button button-primary" id="startQueue">
+        🚀 Start Queue
+      </button>
+      
+      <button class="button button-secondary" id="pauseQueue" style="display:none;">
+        ⏸️ Pause
+      </button>
+      
+      <button class="button button-danger" id="clearQueue">
+        🗑️ Clear Queue
+      </button>
+    </div>
+    
+    <div class="status" id="status">
+      Ready to collect
+    </div>
+  </div>
+  
+  <script src="popup.js"></script>
+</body>
+</html>
