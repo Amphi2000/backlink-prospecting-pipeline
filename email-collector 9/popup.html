@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      width: 450px;
+      min-height: 400px;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      padding: 0;
+      margin: 0;
+    }
+    
+    .container {
+      background: white;
+      margin: 15px;
+      border-radius: 12px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      overflow: hidden;
+    }
+    
+    .header {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 20px;
+      text-align: center;
+    }
+    
+    h2 {
+      font-size: 20px;
+      font-weight: 600;
+      margin: 0;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    }
+    
+    .subtitle {
+      font-size: 13px;
+      opacity: 0.95;
+      margin-top: 5px;
+      font-weight: 400;
+    }
+    
+    .content {
+      padding: 20px;
+    }
+    
+    .section {
+      margin-bottom: 20px;
+    }
+    
+    .section-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: #667eea;
+      margin-bottom: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    
+    button {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 500;
+      width: 100%;
+      margin-top: 8px;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+    }
+    
+    button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+    }
+    
+    button:active {
+      transform: translateY(0);
+    }
+    
+    button:disabled {
+      background: linear-gradient(135deg, #ccc 0%, #aaa 100%);
+      cursor: not-allowed;
+      box-shadow: none;
+      transform: none;
+    }
+    
+    .secondary-btn {
+      background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+      box-shadow: 0 4px 12px rgba(245, 87, 108, 0.3);
+    }
+    
+    .secondary-btn:hover {
+      box-shadow: 0 6px 20px rgba(245, 87, 108, 0.4);
+    }
+    
+    .danger-btn {
+      background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+      box-shadow: 0 4px 12px rgba(250, 112, 154, 0.3);
+    }
+    
+    .danger-btn:hover {
+      box-shadow: 0 6px 20px rgba(250, 112, 154, 0.4);
+    }
+    
+    #csvFile {
+      display: none;
+    }
+    
+    .file-label {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: white;
+      border: 2px dashed #667eea;
+      color: #667eea;
+      padding: 20px;
+      border-radius: 8px;
+      cursor: pointer;
+      text-align: center;
+      font-size: 14px;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      min-height: 60px;
+    }
+    
+    .file-label:hover {
+      background: #f8f9ff;
+      border-color: #764ba2;
+      color: #764ba2;
+    }
+    
+    .file-label.loaded {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border: none;
+    }
+    
+    #status {
+      margin-top: 15px;
+      padding: 12px;
+      border-radius: 8px;
+      font-size: 13px;
+      display: none;
+      font-weight: 500;
+    }
+    
+    .status-info {
+      background: #e3f2fd;
+      color: #1976d2;
+      border-left: 4px solid #1976d2;
+    }
+    
+    .status-success {
+      background: #e8f5e9;
+      color: #388e3c;
+      border-left: 4px solid #388e3c;
+    }
+    
+    .status-error {
+      background: #ffebee;
+      color: #c62828;
+      border-left: 4px solid #c62828;
+    }
+    
+    .stats {
+      background: linear-gradient(135deg, #f8f9ff 0%, #fff5f8 100%);
+      padding: 15px;
+      border-radius: 8px;
+      margin-top: 15px;
+      border: 1px solid #e8e8f0;
+    }
+    
+    .stats-row {
+      display: flex;
+      justify-content: space-between;
+      margin: 8px 0;
+      font-size: 14px;
+    }
+    
+    .stats-label {
+      color: #666;
+      font-weight: 500;
+    }
+    
+    .stats-value {
+      font-weight: 700;
+      color: #667eea;
+      font-size: 16px;
+    }
+    
+    .url-list {
+      max-height: 120px;
+      overflow-y: auto;
+      border: 1px solid #e8e8f0;
+      border-radius: 8px;
+      padding: 10px;
+      margin-top: 10px;
+      font-size: 12px;
+      background: #fafafa;
+    }
+    
+    .url-item {
+      padding: 6px 0;
+      border-bottom: 1px solid #eee;
+      color: #555;
+    }
+    
+    .url-item:last-child {
+      border-bottom: none;
+    }
+    
+    .progress-bar {
+      width: 100%;
+      height: 28px;
+      background: #e8e8f0;
+      border-radius: 14px;
+      overflow: hidden;
+      margin: 12px 0;
+      box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+      transition: width 0.5s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 12px;
+      font-weight: 700;
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+    }
+    
+    .emails-list {
+      max-height: 280px;
+      overflow-y: auto;
+      border: 1px solid #e8e8f0;
+      border-radius: 8px;
+      background: #fafafa;
+      margin-top: 10px;
+    }
+    
+    .email-item {
+      padding: 12px;
+      border-bottom: 1px solid #eee;
+      font-size: 12px;
+      background: white;
+      animation: slideIn 0.4s ease;
+      transition: all 0.3s ease;
+    }
+    
+    .email-item:hover {
+      background: #f8f9ff;
+      transform: translateX(4px);
+    }
+    
+    .email-item:last-child {
+      border-bottom: none;
+    }
+    
+    .email-item.new {
+      background: linear-gradient(90deg, #e8f5e9 0%, #fff 100%);
+      animation: highlight 0.6s ease;
+    }
+    
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    @keyframes highlight {
+      0% { background: linear-gradient(90deg, #4CAF50 0%, #81C784 100%); }
+      100% { background: linear-gradient(90deg, #e8f5e9 0%, #fff 100%); }
+    }
+    
+    .email-address {
+      font-weight: 600;
+      color: #667eea;
+      word-break: break-all;
+      margin-bottom: 6px;
+      font-size: 13px;
+    }
+    
+    .email-meta {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      flex-wrap: wrap;
+      margin-top: 6px;
+    }
+    
+    .email-score {
+      display: inline-flex;
+      align-items: center;
+      padding: 3px 10px;
+      border-radius: 12px;
+      font-size: 11px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+    
+    .score-high {
+      background: linear-gradient(135deg, #4CAF50 0%, #81C784 100%);
+      color: white;
+      box-shadow: 0 2px 6px rgba(76, 175, 80, 0.3);
+    }
+    
+    .score-medium {
+      background: linear-gradient(135deg, #FF9800 0%, #FFB74D 100%);
+      color: white;
+      box-shadow: 0 2px 6px rgba(255, 152, 0, 0.3);
+    }
+    
+    .score-low {
+      background: linear-gradient(135deg, #9E9E9E 0%, #BDBDBD 100%);
+      color: white;
+      box-shadow: 0 2px 6px rgba(158, 158, 158, 0.3);
+    }
+    
+    .email-name {
+      color: #666;
+      font-size: 11px;
+      font-weight: 500;
+    }
+    
+    .email-source {
+      color: #999;
+      font-size: 10px;
+    }
+    
+    .email-url {
+      color: #999;
+      font-size: 10px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 250px;
+    }
+    
+    /* Scrollbar styling */
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+    
+    ::-webkit-scrollbar-track {
+      background: #f1f1f1;
+      border-radius: 4px;
+    }
+    
+    ::-webkit-scrollbar-thumb {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border-radius: 4px;
+    }
+    
+    ::-webkit-scrollbar-thumb:hover {
+      background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+    }
+    
+    .badge {
+      display: inline-block;
+      background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+      color: white;
+      padding: 2px 8px;
+      border-radius: 10px;
+      font-size: 10px;
+      font-weight: 700;
+      margin-left: 8px;
+      box-shadow: 0 2px 4px rgba(245, 87, 108, 0.3);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h2>📧 Email Collector</h2>
+      <div class="subtitle">Philosophy, Religion & Theology Librarians</div>
+    </div>
+    
+    <div class="content">
+      <div class="section">
+        <div class="section-title">📁 Upload Library URLs</div>
+        <label for="csvFile" class="file-label" id="fileLabel">
+          📤 Click to upload CSV file
+        </label>
+        <input type="file" id="csvFile" accept=".csv">
+        <div id="urlPreview" class="url-list" style="display: none;"></div>
+      </div>
+
+      <div class="section">
+        <button id="collectCurrent">📄 Collect from Current Page</button>
+        <button id="collectBatch" class="secondary-btn" disabled>🚀 Start Batch Collection</button>
+        <button id="pauseBatch" class="danger-btn" style="display: none;">⏸️ Pause Processing</button>
+      </div>
+
+      <div class="section">
+        <div class="progress-bar" id="progressContainer" style="display: none;">
+          <div class="progress-fill" id="progressBar">0%</div>
+        </div>
+        
+        <div class="stats" id="stats" style="display: none;">
+          <div class="stats-row">
+            <span class="stats-label">📚 Pages Processed:</span>
+            <span class="stats-value" id="pagesProcessed">0</span>
+          </div>
+          <div class="stats-row">
+            <span class="stats-label">✉️ Total Emails:</span>
+            <span class="stats-value" id="emailsFound">0</span>
+          </div>
+          <div class="stats-row">
+            <span class="stats-label">🎯 High Priority:</span>
+            <span class="stats-value" id="librarianEmails">0</span>
+          </div>
+        </div>
+        
+        <div id="status"></div>
+      </div>
+
+      <div class="section">
+        <button id="exportCSV" class="secondary-btn" disabled>💾 Export Results to CSV</button>
+        <button id="clearData" class="danger-btn">🗑️ Clear All Data</button>
+      </div>
+
+      <div class="section" id="emailsSection" style="display: none;">
+        <div class="section-title">
+          ✅ Found Emails
+          <span class="badge">Philosophy • Religion • Theology</span>
+        </div>
+        <div id="emailsList" class="emails-list"></div>
+      </div>
+    </div>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>
